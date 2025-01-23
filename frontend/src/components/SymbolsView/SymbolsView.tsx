@@ -1,3 +1,4 @@
+import './symbolsView.css';
 import SymbolsGrid from '@/components/SymbolsGrid';
 import PriceChart from '@/components/PriceChart';
 import DesktopInfo from './src/DesktopInfo';
@@ -10,18 +11,20 @@ const SymbolsView = () => {
   };
 
   return (
-      <div className="symbolsView">
-        <DesktopInfo/>
+    <>
+      <DesktopInfo />
+      <div className="symbolsView__content">
         <div className="symbolsView__chart">
-          <h3>PRICE HISTORY</h3>
-        </div>
-        <div className="symbolsView__content">
-          <PriceChart symbolId={activeSymbol}/>
-          <div className="symbolsView__cards">
-            <SymbolsGrid onSymbolClick={handleSymbolClick}/>
+          <div>
+            <h3>PRICE HISTORY</h3>
           </div>
+          <PriceChart symbolId={activeSymbol} />
+        </div>
+        <div className="symbolsView__cards">
+          <SymbolsGrid onSymbolClick={handleSymbolClick} />
         </div>
       </div>
+    </>
   );
 };
 

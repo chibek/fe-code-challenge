@@ -1,0 +1,26 @@
+.symbolsView__content {
+  flex: 1;
+  margin-top: 8px;
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  grid-template-areas: 'cards-area chart-area';
+  grid-gap: 1rem;
+  overflow: hidden;
+}
+
+.symbolsView__chart {
+  grid-area: chart-area;
+}
+
+.symbolsView__cards {
+  grid-area: cards-area;
+  background-color: var(--colorSecondary);
+  overflow-y: auto;
+}
+
+@media screen and (max-width: 1024px) {
+  .symbolsView__content {
+    grid-template-columns: 1fr;
+    grid-template-areas: 'chart-area chart-area' 'cards-area cards-area';
+  }
+}
