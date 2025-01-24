@@ -4,25 +4,28 @@ import { ReactComponent as IndustryIcon } from '@/assets/industry.svg';
 import { ReactComponent as MarketCapIcon } from '@/assets/market_cap.svg';
 import DownArrowIcon from '@/assets/down.png';
 import UpArrowIcon from '@/assets/up.png';
-import { useAppSelector } from '@/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import ListItem from '@/components/ListItem';
 import { formatCurrency } from '@/lib';
 import { TREND_OPTIONS, TREND_OPTIONS_TYPE } from '@/lib/constants';
 import { useShakeCard } from '@/hooks/useShakeCard';
-import { useCallback, useRef } from 'react';
+import { memo, useCallback, useRef } from 'react';
 import { useShadowCard } from '@/hooks/useShadowCard';
-import { selectActiveSymbol, selectShowCardInfo } from '@/store/dashboardOptionsSlice';
+import {
+  selectActiveSymbol,
+  selectShowCardInfo,
+  setActiveSymbol
+} from '@/store/dashboardOptionsSlice';
 import clsx from 'clsx';
 
 type SymbolCardProps = {
   id: string;
-  onClick: (symbolId: string) => void;
 };
 
 type SymbolCardIconsProps = {
   trend?: TREND_OPTIONS_TYPE | null;
 };
-const SymbolCardIcons = ({ trend }: SymbolCardIconsProps) => {
+const SymbolCardIcons = memo(({ trend }: SymbolCardIconsProps) => {
   return (
     <>
       {trend && (
@@ -36,20 +39,20 @@ const SymbolCardIcons = ({ trend }: SymbolCardIconsProps) => {
       )}
     </>
   );
-};
+});
 
 type SymbolCardHeaderProps = {
   symbol: string;
 };
-const SymbolCardHeader = ({ symbol }: SymbolCardHeaderProps) => {
+const SymbolCardHeader = memo(({ symbol }: SymbolCardHeaderProps) => {
   return <div className="symbolCard__header">{symbol}</div>;
-};
+});
 
 type SymbolCardPriceProps = {
   id: string;
   cardRef: React.RefObject<HTMLDivElement>;
 };
-const SymbolCardPrice = ({ id, cardRef }: SymbolCardPriceProps) => {
+const SymbolCardPrice = memo(({ id, cardRef }: SymbolCardPriceProps) => {
   const price = useAppSelector((state) => state.prices[id]);
   useShakeCard(price, cardRef.current);
   useShadowCard(price, cardRef.current);
@@ -60,14 +63,14 @@ const SymbolCardPrice = ({ id, cardRef }: SymbolCardPriceProps) => {
       <div>{formatCurrency(price) || '--'} </div>
     </div>
   );
-};
+});
 
 type SymbolCardItemsProps = {
   companyName: string;
   industry: string;
   marketCap: number;
 };
-const SymbolCardItems = ({ companyName, industry, marketCap }: SymbolCardItemsProps) => {
+const SymbolCardItems = memo(({ companyName, industry, marketCap }: SymbolCardItemsProps) => {
   return (
     <div className="symbolCard__items">
       <ListItem spacing="space-between" Icon={<CompanyIcon />} label={companyName} />
@@ -79,9 +82,11 @@ const SymbolCardItems = ({ companyName, industry, marketCap }: SymbolCardItemsPr
       />
     </div>
   );
-};
+});
 
-const SymbolCard = ({ id, onClick }: SymbolCardProps) => {
+const SymbolCard = ({ id }: SymbolCardProps) => {
+  const dispatch = useAppDispatch();
+
   const cardRef = useRef<HTMLDivElement>(null);
   const activeSymbol = useAppSelector(selectActiveSymbol);
   const showCardInfo = useAppSelector(selectShowCardInfo);
@@ -92,8 +97,8 @@ const SymbolCard = ({ id, onClick }: SymbolCardProps) => {
   );
 
   const handleOnClick = useCallback(() => {
-    onClick(id);
-  }, [id, onClick]);
+    dispatch(setActiveSymbol(id));
+  }, [id]);
 
   return (
     <div
