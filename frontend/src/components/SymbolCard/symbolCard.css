@@ -1,7 +1,13 @@
+:root {
+  --card--radius: 5px;
+  --box--shadow: 0px 0px 13px 2px;
+  --scale--percentage: 2%; /* Percentage to scale 100% - 2 = 98% */
+}
 .symbolCard {
-  border-radius: 5px;
+  border-radius: var(--card--radius);
   background-color: var(--colorWhite);
   position: relative;
+  transition: box-shadow 0.3s ease-in-out, transform 0.2s ease-in-out;
 }
 
 .symbolCard__content {
@@ -21,7 +27,7 @@
   font-weight: bold;
   font-size: large;
   padding: 6px;
-  border-radius: 5px 5px 0 0;
+  border-radius: var(--card--radius) var(--card--radius) 0 0;
 }
 
 .symbolCard__price {
@@ -49,8 +55,24 @@
   }
 }
 
-.symboldCard__shadow {
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+.symbolCard__shadow {
+  box-shadow: var(--box--shadow) rgba(0, 0, 0, 0.7);
+}
+
+.symbolCard__shadow--red {
+  box-shadow: var(--box--shadow) rgba(255, 0, 0, 0.7);
+}
+
+.symbolCard__shadow--green {
+  box-shadow: var(--box--shadow) rgba(0, 255, 0, 0.7);
+}
+
+.symboldCard__scale--down {
+  transform: scale(calc(100% - var(--scale--percentage)));
+}
+
+.symboldCard__scale--up {
+  transform: scale(calc(100% + var(--scale--percentage)));
 }
 
 .symbolCard__shake {
