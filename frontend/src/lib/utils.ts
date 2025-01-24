@@ -6,5 +6,8 @@ export const formatCurrency = (value?: number) => {
   } else if (value >= 1_000_000) {
     return `$${(value / 1_000_000).toFixed(0)}M`;
   }
-  return `$${Math.round(value)}`;
+  return `$${value.toLocaleString('en-US', {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  })}`;
 };

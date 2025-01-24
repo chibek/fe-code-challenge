@@ -2,9 +2,12 @@ import './symbolCard.css';
 import { ReactComponent as CompanyIcon } from '@/assets/company.svg';
 import { ReactComponent as IndustryIcon } from '@/assets/industry.svg';
 import { ReactComponent as MarketCapIcon } from '@/assets/market_cap.svg';
+import DownArrowIcon from '@/assets/down.png';
+import UpArrowIcon from '@/assets/up.png';
 import { useAppSelector } from '@/hooks/redux';
 import ListItem from '@/components/ListItem';
 import { formatCurrency } from '@/lib';
+import { TREND_OPTIONS, TREND_OPTIONS_TYPE } from '@/lib/constants';
 
 type SymbolCardProps = {
   id: string;
@@ -12,28 +15,79 @@ type SymbolCardProps = {
   price: number;
 };
 
+type SymbolCardIconsProps = {
+  trend?: TREND_OPTIONS_TYPE | null;
+};
+const SymbolCardIcons = ({ trend }: SymbolCardIconsProps) => {
+  return (
+    <>
+      {trend && (
+        <div className="symbolCard__icon">
+          {trend === TREND_OPTIONS.UP ? (
+            <img src={UpArrowIcon} alt="up arrow" />
+          ) : (
+            <img src={DownArrowIcon} alt="down arrow" />
+          )}
+        </div>
+      )}
+    </>
+  );
+};
+
+type SymbolCardHeaderProps = {
+  symbol: string;
+};
+const SymbolCardHeader = ({ symbol }: SymbolCardHeaderProps) => {
+  return <div className="symbolCard__header">{symbol}</div>;
+};
+
+type SymbolCardPriceProps = {
+  price: number;
+};
+const SymbolCardPrice = ({ price }: SymbolCardPriceProps) => {
+  return (
+    <div className="symbolCard__price">
+      <div>Price:</div>
+      <div>{formatCurrency(price) || '--'} </div>
+    </div>
+  );
+};
+
+type SymbolCardItemsProps = {
+  companyName: string;
+  industry: string;
+  marketCap: number;
+};
+const SymbolCardItems = ({ companyName, industry, marketCap }: SymbolCardItemsProps) => {
+  return (
+    <div className="symbolCard__items">
+      <ListItem spacing="space-between" Icon={<CompanyIcon />} label={companyName} />
+      <ListItem spacing="space-between" Icon={<IndustryIcon />} label={industry} />
+      <ListItem
+        spacing="space-between"
+        Icon={<MarketCapIcon />}
+        label={formatCurrency(marketCap) || '--'}
+      />
+    </div>
+  );
+};
+
 const SymbolCard = ({ id, onClick, price }: SymbolCardProps) => {
-  const { companyName, industry, marketCap, symbol } = useAppSelector(
+  const { companyName, industry, marketCap, symbol, trend } = useAppSelector(
     (state) => state.stocks.entities[id]
   );
   const handleOnClick = () => {
     onClick(id);
   };
-  const formattedPrice = formatCurrency(price);
-  const formattedMarketCap = formatCurrency(marketCap);
 
   return (
     <div onClick={handleOnClick} className="symbolCard">
-      <div className="symbolCard__header">{symbol}</div>
+      <SymbolCardHeader symbol={symbol} />
       <div className="symbolCard__content">
-        <div className="symbolCard__price">
-          <div>Price:</div>
-          <div>{formattedPrice || '--'} </div>
-        </div>
-        <ListItem spacing="space-between" Icon={<CompanyIcon />} label={companyName} />
-        <ListItem spacing="space-between" Icon={<IndustryIcon />} label={industry} />
-        <ListItem spacing="space-between" Icon={<MarketCapIcon />} label={formattedMarketCap} />
+        <SymbolCardPrice price={price} />
+        <SymbolCardItems companyName={companyName} industry={industry} marketCap={marketCap} />
       </div>
+      <SymbolCardIcons trend={trend} />
     </div>
   );
 };
