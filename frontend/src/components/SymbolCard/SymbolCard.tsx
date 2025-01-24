@@ -8,6 +8,11 @@ import { useAppSelector } from '@/hooks/redux';
 import ListItem from '@/components/ListItem';
 import { formatCurrency } from '@/lib';
 import { TREND_OPTIONS, TREND_OPTIONS_TYPE } from '@/lib/constants';
+import { useShakeCard } from '@/hooks/useShakeCard';
+import { useRef } from 'react';
+import { useShadowCard } from '@/hooks/useShadowCard';
+import { selectActiveSymbol } from '@/store/dashboardOptionsSlice';
+import clsx from 'clsx';
 
 type SymbolCardProps = {
   id: string;
@@ -73,15 +78,29 @@ const SymbolCardItems = ({ companyName, industry, marketCap }: SymbolCardItemsPr
 };
 
 const SymbolCard = ({ id, onClick, price }: SymbolCardProps) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const activeSymbol = useAppSelector(selectActiveSymbol);
+  const isSelected = activeSymbol === id;
   const { companyName, industry, marketCap, symbol, trend } = useAppSelector(
     (state) => state.stocks.entities[id]
   );
+
+  useShakeCard(price, cardRef.current);
+  useShadowCard(price, cardRef.current);
+
   const handleOnClick = () => {
     onClick(id);
   };
 
   return (
-    <div onClick={handleOnClick} className="symbolCard">
+    <div
+      onClick={handleOnClick}
+      className={clsx('symbolCard', [
+        isSelected && 'symbolCard__shadow symboldCard__scale--up',
+        !isSelected && activeSymbol && 'symboldCard__scale--down'
+      ])}
+      ref={cardRef}
+    >
       <SymbolCardHeader symbol={symbol} />
       <div className="symbolCard__content">
         <SymbolCardPrice price={price} />
