@@ -11,7 +11,7 @@ import { TREND_OPTIONS, TREND_OPTIONS_TYPE } from '@/lib/constants';
 import { useShakeCard } from '@/hooks/useShakeCard';
 import { useRef } from 'react';
 import { useShadowCard } from '@/hooks/useShadowCard';
-import { selectActiveSymbol } from '@/store/dashboardOptionsSlice';
+import { selectActiveSymbol, selectShowCardInfo } from '@/store/dashboardOptionsSlice';
 import clsx from 'clsx';
 
 type SymbolCardProps = {
@@ -80,6 +80,7 @@ const SymbolCardItems = ({ companyName, industry, marketCap }: SymbolCardItemsPr
 const SymbolCard = ({ id, onClick, price }: SymbolCardProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const activeSymbol = useAppSelector(selectActiveSymbol);
+  const showCardInfo = useAppSelector(selectShowCardInfo);
   const isSelected = activeSymbol === id;
   const { companyName, industry, marketCap, symbol, trend } = useAppSelector(
     (state) => state.stocks.entities[id]
@@ -104,7 +105,9 @@ const SymbolCard = ({ id, onClick, price }: SymbolCardProps) => {
       <SymbolCardHeader symbol={symbol} />
       <div className="symbolCard__content">
         <SymbolCardPrice price={price} />
-        <SymbolCardItems companyName={companyName} industry={industry} marketCap={marketCap} />
+        {showCardInfo && (
+          <SymbolCardItems companyName={companyName} industry={industry} marketCap={marketCap} />
+        )}
       </div>
       <SymbolCardIcons trend={trend} />
     </div>
