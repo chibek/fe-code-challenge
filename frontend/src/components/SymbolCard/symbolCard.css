@@ -1,7 +1,36 @@
 .symbolCard {
-  border: 2px solid black; /* just for visibility, feel free to remove it */
-  margin: 10px; /* just for visibility, feel free to remove it */
-  padding: 10px; /* just for visibility, feel free to remove it */
+  border-radius: 5px;
+  overflow: hidden;
+  background-color: var(--colorWhite);
+}
+
+.symbolCard__content {
+  padding: 4px 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.symbolCard__header {
+  background-color: var(--colorDark);
+  color: var(--colorWhite);
+  font-weight: bold;
+  font-size: large;
+  padding: 4px;
+}
+
+.symbolCard__price {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  padding: 0px 4px;
+  :nth-child(1) {
+    text-transform: uppercase;
+  }
+  :nth-child(2) {
+    font-weight: bold;
+    font-size: xx-large;
+  }
 }
 
 .symbolCard__shake {
