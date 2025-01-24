@@ -9,7 +9,7 @@ import ListItem from '@/components/ListItem';
 import { formatCurrency } from '@/lib';
 import { TREND_OPTIONS, TREND_OPTIONS_TYPE } from '@/lib/constants';
 import { useShakeCard } from '@/hooks/useShakeCard';
-import { useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import { useShadowCard } from '@/hooks/useShadowCard';
 import { selectActiveSymbol, selectShowCardInfo } from '@/store/dashboardOptionsSlice';
 import clsx from 'clsx';
@@ -17,7 +17,6 @@ import clsx from 'clsx';
 type SymbolCardProps = {
   id: string;
   onClick: (symbolId: string) => void;
-  price: number;
 };
 
 type SymbolCardIconsProps = {
@@ -47,9 +46,14 @@ const SymbolCardHeader = ({ symbol }: SymbolCardHeaderProps) => {
 };
 
 type SymbolCardPriceProps = {
-  price: number;
+  id: string;
+  cardRef: React.RefObject<HTMLDivElement>;
 };
-const SymbolCardPrice = ({ price }: SymbolCardPriceProps) => {
+const SymbolCardPrice = ({ id, cardRef }: SymbolCardPriceProps) => {
+  const price = useAppSelector((state) => state.prices[id]);
+  useShakeCard(price, cardRef.current);
+  useShadowCard(price, cardRef.current);
+
   return (
     <div className="symbolCard__price">
       <div>Price:</div>
@@ -77,21 +81,19 @@ const SymbolCardItems = ({ companyName, industry, marketCap }: SymbolCardItemsPr
   );
 };
 
-const SymbolCard = ({ id, onClick, price }: SymbolCardProps) => {
+const SymbolCard = ({ id, onClick }: SymbolCardProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const activeSymbol = useAppSelector(selectActiveSymbol);
   const showCardInfo = useAppSelector(selectShowCardInfo);
+
   const isSelected = activeSymbol === id;
   const { companyName, industry, marketCap, symbol, trend } = useAppSelector(
     (state) => state.stocks.entities[id]
   );
 
-  useShakeCard(price, cardRef.current);
-  useShadowCard(price, cardRef.current);
-
-  const handleOnClick = () => {
+  const handleOnClick = useCallback(() => {
     onClick(id);
-  };
+  }, [id, onClick]);
 
   return (
     <div
@@ -104,7 +106,7 @@ const SymbolCard = ({ id, onClick, price }: SymbolCardProps) => {
     >
       <SymbolCardHeader symbol={symbol} />
       <div className="symbolCard__content">
-        <SymbolCardPrice price={price} />
+        <SymbolCardPrice id={id} cardRef={cardRef} />
         {showCardInfo && (
           <SymbolCardItems companyName={companyName} industry={industry} marketCap={marketCap} />
         )}
