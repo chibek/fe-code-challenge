@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, memo } from 'react';
 import './priceChart.css';
 import { Line, LineChart, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
@@ -6,7 +6,7 @@ import { fetchPriceHistory, selectors } from '@/store/priceHistorySlice';
 import Loading from '@/components/Loading';
 import { selectActiveSymbol } from '@/store/dashboardOptionsSlice';
 
-const PriceChart = () => {
+const PriceChart = memo(() => {
   const dispatch = useAppDispatch();
   const symbolId = useAppSelector(selectActiveSymbol);
 
@@ -46,6 +46,6 @@ const PriceChart = () => {
       </ResponsiveContainer>
     </div>
   );
-};
+});
 
-export default PriceChart;
+export default memo(PriceChart);
