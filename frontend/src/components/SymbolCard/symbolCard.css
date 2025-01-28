@@ -1,7 +1,78 @@
+:root {
+  --card--radius: 5px;
+  --box--shadow: 0px 0px 13px 2px;
+  --scale--percentage: 2%; /* Percentage to scale 100% - 2 = 98% */
+}
 .symbolCard {
-  border: 2px solid black; /* just for visibility, feel free to remove it */
-  margin: 10px; /* just for visibility, feel free to remove it */
-  padding: 10px; /* just for visibility, feel free to remove it */
+  border-radius: var(--card--radius);
+  background-color: var(--colorWhite);
+  position: relative;
+  transition: box-shadow 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.symbolCard__content {
+  padding: 4px;
+}
+
+.symbolCard__items {
+  padding: 0px 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.symbolCard__header {
+  background-color: var(--colorDark);
+  color: var(--colorWhite);
+  font-weight: bold;
+  font-size: large;
+  padding: 4px;
+  border-radius: var(--card--radius) var(--card--radius) 0 0;
+}
+
+.symbolCard__price {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  padding: 0px 0px 6px 10px;
+  :nth-child(1) {
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  :nth-child(2) {
+    font-weight: bold;
+    font-size: x-large;
+  }
+}
+
+.symbolCard__icon {
+  position: absolute;
+  right: -20px;
+  top: -18px;
+  img {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+.symbolCard__shadow {
+  box-shadow: var(--box--shadow) rgba(0, 0, 0, 0.7);
+}
+
+.symbolCard__shadow--red {
+  box-shadow: var(--box--shadow) rgba(255, 0, 0, 0.7);
+}
+
+.symbolCard__shadow--green {
+  box-shadow: var(--box--shadow) rgba(0, 255, 0, 0.7);
+}
+
+.symboldCard__scale--down {
+  transform: scale(calc(100% - var(--scale--percentage)));
+}
+
+.symboldCard__scale--up {
+  transform: scale(calc(100% + var(--scale--percentage)));
 }
 
 .symbolCard__shake {

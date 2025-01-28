@@ -76,12 +76,15 @@ select {
 #root {
   height: 100vh;
   width: 100%;
+  overflow-y: hidden;
 }
 
 .App {
   padding: 12px 24px 0;
   background-color: rgba(14, 17, 35, 0.02);
-  min-height: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 @media (max-width: 767px) {

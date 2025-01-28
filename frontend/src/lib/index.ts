@@ -1,2 +1,2 @@
-// import { x } from './x';
-// export { x };
+import { formatCurrency } from './utils';
+export { formatCurrency };
